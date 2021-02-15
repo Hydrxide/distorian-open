@@ -1,15 +1,6 @@
 {
-    "ARCHIVE_ROLE_ID": "786105785071435837",
-    "ARCHIVE_CHANNEL_ID": "749382668352749598",
     "COMMAND_PREFIX": "-",
     "ARCHIVE_COMMAND": "archive",
     "SET_ARCHIVE_COMMAND": "setarchive",
-    "SET_ROLE_COMMAND": "setrole",
-    "SETTINGS": {
-        "590975563498520589": {
-            "ARCHIVE_ROLE_ID": "591023516921364557",
-            "ARCHIVE_CHANNEL_ID": "749382668352749598",
-            "DELETE_AND_ARCHIVE": false
-        }
-    }
+    "SET_ROLE_COMMAND": "setrole"
 }

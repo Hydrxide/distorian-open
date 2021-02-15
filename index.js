@@ -55,6 +55,7 @@ client.on("message", async (message) => {
                 return;
             }
 
+            console.time("lol");
             archive(message.channel, db_guild);
         }
 
@@ -124,7 +125,6 @@ async function archive(channel, db_guild) {
     const channelMessages = [];
     let lastFetchedMessageId;
 
-    let cycle = 100;
 
     // Fetch every message in the channel in intervals of 100 messages
     while (true) {
@@ -134,7 +134,6 @@ async function archive(channel, db_guild) {
         channelMessages.push(...messagesReceived.array());
         lastFetchedMessageId = messagesReceived.last().id;
         console.log(cycle + ' messages archived');
-        cycle = cycle + 100;
         if (messagesReceived.size < 100) break;
 
     }
@@ -165,6 +164,7 @@ function save(path, channel, messages, db_guild) {
         stream.end();
 
         // File written. Time to upload to Discord.
+        console.timeEnd("lol");
         upload(path, channel, db_guild).catch(console.error);
     });
 }

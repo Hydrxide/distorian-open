@@ -1,8 +1,6 @@
 # Discord HTML Archive Bot
 Written by @martosis and @hydrxide utilizing Discord.js & SQLite
 
-<b> IF YOU ARE SELF HOSTING THE BOT YOU <u>NEED</u> TO MAKE YOUR OWN "login.json" FILE
-
 ---
 <b>Official Discord: https://discord.gg/placeholder </b>
 <br>
