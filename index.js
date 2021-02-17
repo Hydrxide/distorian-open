@@ -133,7 +133,6 @@ async function archive(channel, db_guild) {
         const messagesReceived = await channel.messages.fetch(options);
         channelMessages.push(...messagesReceived.array());
         lastFetchedMessageId = messagesReceived.last().id;
-        console.log(cycle + ' messages archived');
         if (messagesReceived.size < 100) break;
 
     }
