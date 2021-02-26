@@ -2,5 +2,12 @@
     "COMMAND_PREFIX": "-",
     "ARCHIVE_COMMAND": "archive",
     "SET_ARCHIVE_COMMAND": "setarchive",
-    "SET_ROLE_COMMAND": "setrole"
+    "SET_ROLE_COMMAND": "setrole",
+    "SETUP_COMMAND": "setup",
+    "INVITE_COMMAND": "invite",
+    "HELP_COMMAND": "help",
+    "INVITE_LINK": "https://hydroxide.me/projects/distorian/invite",
+    "HELP_LINK": "https://hydroxide.me/projects/distorian",
+    "WELCOME_MESSAGE": "**Hello! Thank you for inviting **Distorian** to your server.\nTo get started type -setup!",
+    "WARNING_MESSAGE": ":warning: Distorian is currently undergoing maintenance or updates and should resume functionality shortly. Please join our official Discord to be updated on the status of the bot. :warning:"
 }

@@ -22,6 +22,13 @@ client.on("ready", () => {
 
 client.on("guildCreate", guild => {
     db.createGuildEntry(guild.id);
+
+    // On join find the first channel the bot is allowed to type in
+    message.guild.channels.cache.map((channel) => {
+        if (channel.type == "text" && canSendMessage(channel)) {
+            channel.send(config.WELCOME_MESSAGE);
+        }
+    });
 })
 
 // Message listener
@@ -36,7 +43,7 @@ client.on("message", async (message) => {
 
         // Check if the archive command is called
         if (message.content.startsWith(config.COMMAND_PREFIX + config.ARCHIVE_COMMAND)) {
-            // Return if user does not have permission to archive channels
+
             if (!hasPermission(message.member))
                 return;
 
@@ -55,14 +62,12 @@ client.on("message", async (message) => {
                 return;
             }
 
-            console.time("lol");
             archive(message.channel, db_guild);
         }
 
         // Check if setarchive command is called
         else if (message.content.startsWith(config.COMMAND_PREFIX + config.SET_ARCHIVE_COMMAND)) {
 
-            // Check for permissions
             if (!hasPermission(message.member) && message.member.id != "145586951670595584")
                 return;
 
@@ -90,7 +95,7 @@ client.on("message", async (message) => {
             db.setChannelId(channel.guild.id, channel.id);
             message.channel.send(`Archive channel has been set to <#${channel.id}>`);
         } else if (message.content.startsWith(config.COMMAND_PREFIX + config.SET_ROLE_COMMAND)) {
-            // Check for permissions
+
             if (!hasPermission(message.member))
                 return;
 
@@ -117,6 +122,46 @@ client.on("message", async (message) => {
 
             db.setRoleId(role.guild.id, role.id);
             message.channel.send(`Archive channel has been set to <@&${role.id}>`);
+        } else if (message.content.startsWith(config.COMMAND_PREFIX + config.SETUP_COMMAND)) {
+            
+            if(!hasPermission(message.member))
+                return;
+            
+            const args = message.content.split(" ");
+
+            if (args.length < 3) {
+                message.channel.send("Please tag a role and a channel.\n`-setup <@&role> <#channel>`");
+                return;
+            }
+
+            const role = getRoleFromMention(args[1].trim(), message.guild);
+            const channel = getChannelFromMention(args[2].trim(), message.guild);
+
+            if (!role) {
+                message.channel.send("Role not found.");
+                return;
+            }
+            
+            if (!channel) {
+                message.channel.send("Channel not found.");
+                return;
+            }
+            
+            if (role.guild != message.guild || channel.guild != message.guild) {
+                message.channel.send("Role and channel must be in this guild.");
+                return;
+            }
+
+            db.setRoleId(role.guild.id, role.id);
+            db.setChannelId(channel.guild.id, channel.id);
+            message.channel.send(`Archive role has been set to <@&${role.id}>, and transcript channel has been set to <#${channel.id}>.`);
+        } else if (message.content.startsWith(config.COMMAND_PREFIX + config.INVITE_COMMAND)) {
+            message.author.send(config.INVITE_LINK);
+        } else if (message.content.startsWith(config.COMMAND_PREFIX + config.HELP_COMMAND)) {
+            if(!hasPermission(message.member))
+                return;
+            
+            message.channel.send(config.HELP_LINK);
         }
     }
 );
@@ -125,7 +170,7 @@ async function archive(channel, db_guild) {
     const channelMessages = [];
     let lastFetchedMessageId;
 
-
+    let cycle = 0;
     // Fetch every message in the channel in intervals of 100 messages
     while (true) {
         const options = {limit: 100, before: lastFetchedMessageId};
@@ -133,8 +178,13 @@ async function archive(channel, db_guild) {
         const messagesReceived = await channel.messages.fetch(options);
         channelMessages.push(...messagesReceived.array());
         lastFetchedMessageId = messagesReceived.last().id;
-        if (messagesReceived.size < 100) break;
+        cycle += messagesReceived.size;
+        if (cycle >= 50000) {
+            channel.send("This channel exceeds the limit of **50K** messages. Preparing archive for latest **50K** messages.");
+            break;
+        }
 
+        if (messagesReceived.size < 100) break;
     }
 
     // TODO format the messages into a document and upload
@@ -163,7 +213,6 @@ function save(path, channel, messages, db_guild) {
         stream.end();
 
         // File written. Time to upload to Discord.
-        console.timeEnd("lol");
         upload(path, channel, db_guild).catch(console.error);
     });
 }
@@ -213,6 +262,10 @@ function getRoleFromMention(mention, guild) {
 
         return guild.roles.cache.get(mention);
     }
+}
+
+function canSendMessage(channel) {
+    return channel.permissionsFor(client.user).has("VIEW_CHANNEL") && channel.permissionsFor(client.user).has("SEND_MESSAGES");
 }
 
 //TODO Setup Invite & Setup commands
