@@ -11,10 +11,6 @@ Please report all bugs / recommend features through the ticket system in this Di
 
 Archives the current channel as plaintext to the designated output channel
 
-><b> -htarchive </b>
-
-Archives the current channel as html to the designated output channel (EXPERIMENTAL FEATURE)
-
 ><b> -invite </b>
 
 Sends the user a DM with a link to invite the bot to their own Discord.
