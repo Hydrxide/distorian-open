@@ -1,4 +1,4 @@
-# Discord HTML Archive Bot
+# Discord  Archive Bot
 Written by @martosis and @hydrxide utilizing Discord.js & SQLite
 
 ---
