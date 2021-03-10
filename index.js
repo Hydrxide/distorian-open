@@ -187,7 +187,6 @@ async function archive(channel, db_guild) {
         if (messagesReceived.size < 100) break;
     }
 
-    // TODO format the messages into a document and upload
     //const path = `./archives/${channel.id}.txt`;
     const path = `archives/${channel.id}.txt`;
     save(path, channel, channelMessages.reverse(), db_guild);
@@ -267,12 +266,3 @@ function getRoleFromMention(mention, guild) {
 function canSendMessage(channel) {
     return channel.permissionsFor(client.user).has("VIEW_CHANNEL") && channel.permissionsFor(client.user).has("SEND_MESSAGES");
 }
-
-//TODO Setup Invite & Setup commands
-//TODO Set a message limit for files to prevent non-uploadable files (Probably around 50k messages)
-//TODO Set up a function to split archive requests larger than the limit above to create 2 or more files
-// [After bot is pushed live]
-//TODO Set up Discord server for the bot (Darryl)
-//TODO Set up web page for the bot (Darryl)
-//TODO Implement HTML file saving
-//TODO Open source release (Final)
